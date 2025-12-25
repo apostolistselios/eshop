@@ -5,8 +5,11 @@
 
   <ng-template #end>
     <div class="d-flex gap-2">
-      <p-button label="Log in" size="small"></p-button>
-      <p-button label="Sign up" size="small"></p-button>
+      <p-menu #loginMenu [model]="loginMenuItems" [popup]="true" />
+      <p-button label="Log in" (click)="loginMenu.toggle($event)" size="small" />
+
+      <p-menu #signupMenu [model]="signupMenuItems" [popup]="true" />
+      <p-button label="Sign up" (click)="signupMenu.toggle($event)" size="small" />
     </div>
   </ng-template>
 </p-menubar>
