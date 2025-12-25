@@ -5,25 +5,19 @@ import { Card } from 'primeng/card';
 import { InputText } from 'primeng/inputtext';
 import { Password } from 'primeng/password';
 
+import { LoginService } from '../login.service';
+
 @Component({
   selector: 'app-shop-login',
   imports: [ReactiveFormsModule, Card, InputText, Password, Button],
+  providers: [LoginService],
   templateUrl: './shop-login.html',
   styleUrl: './shop-login.scss',
 })
 export class ShopLogin {
-  private formBuilder = inject(FormBuilder);
-
-  protected loginForm = this.formBuilder.group({
-    username: [''],
-    password: [''],
-  });
+  protected loginService = inject(LoginService);
 
   login() {
-    console.log('login as shop called', this.loginForm.getRawValue());
-
-    /**
-     * @todo call backend
-     */
+    this.loginService.loginAsShop();
   }
 }

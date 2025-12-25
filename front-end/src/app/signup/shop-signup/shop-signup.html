@@ -1,0 +1,29 @@
+<div class="d-flex justify-content-center">
+  <p-card header="Signup as shop" class="w-25">
+    <form [formGroup]="signupForm" class="d-flex flex-column gap-3">
+      <div class="d-flex flex-column">
+        <label for="tin">Tax Identification Number (TIN)</label>
+        <input pInputText id="tin" formControlName="tin" />
+      </div>
+
+      <div class="d-flex flex-column">
+        <label for="brandName">Brand name</label>
+        <input pInputText id="brandName" formControlName="brandName" />
+      </div>
+
+      <div class="d-flex flex-column">
+        <label for="owner">Owner</label>
+        <input pInputText id="owner" formControlName="owner" />
+      </div>
+
+      <div class="d-flex flex-column">
+        <label for="password">Password</label>
+        <p-password inputId="password" [feedback]="false" inputStyleClass="w-100" formControlName="password" />
+      </div>
+
+      <div>
+        <p-button type="submit" class="float-end" label="Sign up" (onClick)="signup()"></p-button>
+      </div>
+    </form>
+  </p-card>
+</div>

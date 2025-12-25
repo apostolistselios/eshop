@@ -1,0 +1,34 @@
+<div class="d-flex justify-content-center">
+  <p-card header="Signup as customer" class="w-25">
+    <form [formGroup]="signupForm" class="d-flex flex-column gap-3">
+      <div class="d-flex flex-column">
+        <label for="tin">Tax Identification Number (TIN)</label>
+        <input pInputText id="tin" formControlName="tin" />
+      </div>
+
+      <div class="d-flex flex-column">
+        <label for="firstname">First name</label>
+        <input pInputText id="firstname" formControlName="firstname" />
+      </div>
+
+      <div class="d-flex flex-column">
+        <label for="lastname">Last name</label>
+        <input pInputText id="lastname" formControlName="lastname" />
+      </div>
+
+      <div class="d-flex flex-column">
+        <label for="email">Email</label>
+        <input pInputText id="email" formControlName="email" />
+      </div>
+
+      <div class="d-flex flex-column">
+        <label for="password">Password</label>
+        <p-password inputId="password" [feedback]="false" inputStyleClass="w-100" formControlName="password" />
+      </div>
+
+      <div>
+        <p-button type="submit" class="float-end" label="Sign up" (onClick)="signup()"></p-button>
+      </div>
+    </form>
+  </p-card>
+</div>
