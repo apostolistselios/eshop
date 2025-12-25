@@ -1,1 +1,13 @@
 /* You can add global styles to this file, and also import other style files */
+@use 'bootstrap/scss/bootstrap';
+
+@import 'primeicons/primeicons.css';
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+
+* {
+  font-family: 'Roboto';
+}
+
+:root {
+  --bs-body-line-height: 1;
+}
