@@ -53,7 +53,6 @@ export class AuthService {
   }
 
   private clearAuthState(): void {
-    console.log('clearAuthState');
     this._currentUser.set(null);
     localStorage.removeItem('currentUser');
   }

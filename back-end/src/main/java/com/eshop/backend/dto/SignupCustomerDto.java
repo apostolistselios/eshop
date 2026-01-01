@@ -1,30 +1,18 @@
-package com.eshop.backend.models;
+package com.eshop.backend.dto;
 
-import jakarta.persistence.*;
-
-@Entity
-public class Customer {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
-
-    /**
-     * Tax identification number
-     */
+public class SignupCustomerDto {
     private String tin;
     private String firstname;
     private String lastname;
     private String email;
+    private String password;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
-
-    public Customer() {
-    }
-
-    public int getId() {
-        return id;
+    public SignupCustomerDto(String tin, String firstname, String lastname, String email, String password) {
+        this.tin = tin;
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.email = email;
+        this.password = password;
     }
 
     public String getTin() {
@@ -59,11 +47,11 @@ public class Customer {
         this.email = email;
     }
 
-    public User getUser() {
-        return user;
+    public String getPassword() {
+        return password;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

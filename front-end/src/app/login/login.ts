@@ -5,6 +5,7 @@ import { Button } from 'primeng/button';
 import { Card } from 'primeng/card';
 import { InputText } from 'primeng/inputtext';
 import { Password } from 'primeng/password';
+import { MessageService } from 'primeng/api';
 
 import { AuthService } from '../auth/auth.service';
 
@@ -17,6 +18,7 @@ import { AuthService } from '../auth/auth.service';
 export class Login {
   private router = inject(Router);
   private formBuilder = inject(FormBuilder);
+  private messageService = inject(MessageService);
   private authService = inject(AuthService);
 
   protected loginForm = this.formBuilder.nonNullable.group({
@@ -25,8 +27,24 @@ export class Login {
   });
 
   async login() {
-    const values = this.loginForm.getRawValue();
-    await this.authService.login(values.email, values.password);
-    this.router.navigate(['/products']);
+    try {
+      const values = this.loginForm.getRawValue();
+      await this.authService.login(values.email, values.password);
+
+      this.messageService.add({
+        severity: 'success',
+        summary: 'Success',
+        detail: 'Successfully logged in: ' + values.email,
+      });
+
+      this.router.navigate(['/products']);
+    } catch (error) {
+      console.error(error);
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'Invalid credentials',
+      });
+    }
   }
 }

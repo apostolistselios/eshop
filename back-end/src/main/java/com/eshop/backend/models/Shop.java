@@ -1,9 +1,6 @@
 package com.eshop.backend.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 @Entity
 public class Shop {
@@ -17,7 +14,10 @@ public class Shop {
     private String tin;
     private String brandName;
     private String owner;
-    private String password;
+
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
     public Shop() {
     }
@@ -50,11 +50,11 @@ public class Shop {
         this.owner = owner;
     }
 
-    public String getPassword() {
-        return password;
+    public User getUser() {
+        return user;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setUser(User user) {
+        this.user = user;
     }
 }

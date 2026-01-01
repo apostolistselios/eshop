@@ -12,13 +12,14 @@ import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 
 @Configuration
 @EnableWebSecurity
-public class UserSecurityConfig {
+public class SecurityConfig {
     @Bean
     SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
         http
                 // disable CSRF for simplicity; in production, enable and configure it
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/signup/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form

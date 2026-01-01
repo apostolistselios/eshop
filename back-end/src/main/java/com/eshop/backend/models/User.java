@@ -14,15 +14,11 @@ public class User {
     @JsonIgnore
     private String password;
 
-    @OneToOne(fetch = FetchType.EAGER, targetEntity = Role.class)
-    @JoinColumn(name = "role_id", referencedColumnName = "id", nullable = false)
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "role_id", nullable = false)
     private Role role;
 
     public User() {
-    }
-
-    private User(String email) {
-        this.email = email;
     }
 
     public int getId() {

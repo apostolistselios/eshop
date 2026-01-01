@@ -1,0 +1,32 @@
+package com.eshop.backend.services;
+
+import com.eshop.backend.exceptions.ShopAlreadyExistsException;
+import com.eshop.backend.models.Shop;
+import com.eshop.backend.models.User;
+import com.eshop.backend.repositories.ShopRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+@Service
+public class ShopService {
+    @Autowired
+    private ShopRepository shopRepository;
+
+    public Shop createShop(String tin, String brandName, String owner, User user) {
+        this.assertTinDoesNotExist(tin);
+
+        Shop shop = new Shop();
+        shop.setTin(tin);
+        shop.setBrandName(brandName);
+        shop.setOwner(owner);
+        shop.setUser(user);
+
+        return this.shopRepository.save(shop);
+    }
+
+    private void assertTinDoesNotExist(String tin) {
+        if (this.shopRepository.existsByTin(tin)) {
+            throw new ShopAlreadyExistsException(tin);
+        }
+    }
+}
