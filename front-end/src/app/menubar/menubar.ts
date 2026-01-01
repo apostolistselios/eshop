@@ -1,53 +1,66 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, effect, inject, OnInit, signal } from '@angular/core';
+import { Router, RouterLink } from '@angular/router';
 import { MenuItem } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { Menu } from 'primeng/menu';
 import { MenubarModule } from 'primeng/menubar';
 
+import { AuthService } from '../auth/auth.service';
+import { Role } from '../auth/role.enum';
+
 @Component({
   selector: 'app-menubar',
-  imports: [MenubarModule, Menu, ButtonModule],
+  imports: [MenubarModule, Menu, ButtonModule, RouterLink],
   templateUrl: './menubar.html',
   styleUrl: './menubar.scss',
 })
-export class Menubar implements OnInit {
-  items: MenuItem[] | undefined;
-  loginMenuItems: MenuItem[] | undefined;
-  signupMenuItems: MenuItem[] | undefined;
+export class Menubar {
+  private router = inject(Router);
+  protected authService = inject(AuthService);
 
-  ngOnInit() {
-    this.items = [
+  items = signal<MenuItem[] | undefined>(undefined);
+  signupMenuItems = signal<MenuItem[] | undefined>(undefined);
+
+  constructor() {
+    effect(() => {
+      this.buildMenu();
+    });
+  }
+
+  private buildMenu() {
+    const user = this.authService.currentUser();
+    this.items.set([
       {
         label: 'Home',
         icon: 'pi pi-home',
         routerLink: '/',
       },
-    ];
-
-    this.loginMenuItems = [
       {
-        label: 'Customer',
-        icon: 'pi pi-user',
-        routerLink: '/customer/login',
+        label: 'Products',
+        icon: 'pi pi-shopping-bag',
+        routerLink: '/products',
+        visible: user ? this.authService.hasAnyRole([Role.CUSTOMER, Role.SHOP]) : false,
       },
-      {
-        label: 'Shop',
-        icon: 'pi pi-shop',
-        routerLink: '/shop/login',
-      },
-    ];
+    ]);
 
-    this.signupMenuItems = [
+    this.signupMenuItems.set([
       {
         label: 'Customer',
         icon: 'pi pi-user',
         routerLink: '/customer/signup',
+        visible: !user,
       },
       {
         label: 'Shop',
         icon: 'pi pi-shop',
         routerLink: '/shop/signup',
+        visible: !user,
       },
-    ];
+    ]);
+  }
+
+  async logout() {
+    this.authService.logout();
+    this.router.navigate(['/']);
   }
 }

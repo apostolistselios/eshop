@@ -1,4 +1,4 @@
-package com.eshop.backend.model;
+package com.eshop.backend.models;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -9,7 +9,7 @@ import jakarta.persistence.Id;
 public class Shop {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private int id;
 
     /**
      * Tax Identification Number
@@ -22,7 +22,7 @@ public class Shop {
     public Shop() {
     }
 
-    public Long getId() {
+    public int getId() {
         return id;
     }
 

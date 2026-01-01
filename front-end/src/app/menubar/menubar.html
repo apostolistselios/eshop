@@ -1,15 +1,18 @@
-<p-menubar [model]="items">
+<p-menubar [model]="items()">
   <ng-template #start>
     <span class="pi pi-shop"></span>
   </ng-template>
 
   <ng-template #end>
     <div class="d-flex gap-2">
-      <p-menu #loginMenu [model]="loginMenuItems" [popup]="true" />
-      <p-button label="Log in" (click)="loginMenu.toggle($event)" size="small" />
+      @if (!authService.currentUser()) {
+        <p-button label="Log in" size="small" routerLink="/login" />
 
-      <p-menu #signupMenu [model]="signupMenuItems" [popup]="true" />
-      <p-button label="Sign up" (click)="signupMenu.toggle($event)" size="small" />
+        <p-menu #signupMenu [model]="signupMenuItems()" [popup]="true" />
+        <p-button label="Sign up" (click)="signupMenu.toggle($event)" size="small" />
+      } @else {
+        <p-button label="Log out" (click)="logout()" size="small" />
+      }
     </div>
   </ng-template>
 </p-menubar>
