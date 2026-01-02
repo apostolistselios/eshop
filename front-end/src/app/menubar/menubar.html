@@ -11,7 +11,7 @@
         <p-menu #signupMenu [model]="signupMenuItems()" [popup]="true" />
         <p-button label="Sign up" (click)="signupMenu.toggle($event)" size="small" />
       } @else {
-        <p-button label="Log out" (click)="logout()" size="small" />
+        <p-button label="Log out" severity="secondary" (click)="logout()" size="small" />
       }
     </div>
   </ng-template>

@@ -33,7 +33,7 @@ export const routes: Routes = [
   {
     path: 'products',
     canActivate: [AuthGuard, RolesGuard],
-    data: { roles: [Role.CUSTOMER, Role.SHOP] },
+    data: { roles: [Role.CUSTOMER] },
     loadComponent: () => import('./products/products').then((m) => m.Products),
   },
 ];

@@ -1,14 +1,8 @@
 package com.eshop.backend.config;
 
 import com.eshop.backend.constants.Roles;
-import com.eshop.backend.models.Customer;
-import com.eshop.backend.models.Role;
-import com.eshop.backend.models.Shop;
-import com.eshop.backend.models.User;
-import com.eshop.backend.repositories.CustomerRepository;
-import com.eshop.backend.repositories.RoleRepository;
-import com.eshop.backend.repositories.ShopRepository;
-import com.eshop.backend.repositories.UserRepository;
+import com.eshop.backend.models.*;
+import com.eshop.backend.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
@@ -33,10 +27,14 @@ public class InitializationConfig implements CommandLineRunner {
     @Autowired
     private CustomerRepository customerRepository;
 
+    @Autowired
+    private ProductRepository productRepository;
+
     @Override
     public void run(String... args) throws Exception {
         this.initializeRoles();
         this.initializeUsers();
+        this.initializeProducts();
     }
 
     private void initializeRoles() {
@@ -90,5 +88,55 @@ public class InitializationConfig implements CommandLineRunner {
             customer.setUser(customerUser);
             customerRepository.save(customer);
         }
+    }
+
+    private void initializeProducts() {
+        Shop shop = this.shopRepository.findByTin("999999999")
+                .orElseThrow(() -> new RuntimeException("Invalid demo shop"));
+
+        Product laptop = new Product();
+        laptop.setType("Laptop");
+        laptop.setBrand("Lenovo");
+        laptop.setDescription("A great laptop");
+        laptop.setPrice(500);
+        laptop.setQuantity(3);
+        laptop.setShop(shop);
+        this.productRepository.save(laptop);
+
+        Product pc = new Product();
+        pc.setType("PC");
+        pc.setBrand("Dell");
+        pc.setDescription("A great PC");
+        pc.setPrice(700);
+        pc.setQuantity(5);
+        pc.setShop(shop);
+        this.productRepository.save(pc);
+
+        Product monitor = new Product();
+        monitor.setType("Monitor");
+        monitor.setBrand("Dell");
+        monitor.setDescription("A great monitor");
+        monitor.setPrice(200);
+        monitor.setQuantity(1);
+        monitor.setShop(shop);
+        this.productRepository.save(monitor);
+
+        Product keyboard = new Product();
+        keyboard.setType("Keyboard");
+        keyboard.setBrand("Microsoft");
+        keyboard.setDescription("A great keyboard");
+        keyboard.setPrice(50);
+        keyboard.setQuantity(0);
+        keyboard.setShop(shop);
+        this.productRepository.save(keyboard);
+
+        Product mouse = new Product();
+        mouse.setType("Mouse");
+        mouse.setBrand("Microsoft");
+        mouse.setDescription("A great mouse");
+        mouse.setPrice(20);
+        mouse.setQuantity(2);
+        mouse.setShop(shop);
+        this.productRepository.save(mouse);
     }
 }
