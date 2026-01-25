@@ -37,7 +37,7 @@ export class Login {
         detail: 'Successfully logged in: ' + values.email,
       });
 
-      this.router.navigate(['/products']);
+      this.router.navigate(['/']);
     } catch (error) {
       console.error(error);
       this.messageService.add({

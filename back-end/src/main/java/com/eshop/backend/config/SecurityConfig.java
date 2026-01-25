@@ -1,5 +1,6 @@
 package com.eshop.backend.config;
 
+import com.eshop.backend.constants.Roles;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
@@ -19,10 +20,17 @@ public class SecurityConfig {
                 // disable CSRF for simplicity; in production, enable and configure it
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
+                        .requestMatchers("/login").permitAll()
                         .requestMatchers("/signup/**").permitAll()
+                        .requestMatchers("/shop/**").hasRole(Roles.SHOP)
+                        .requestMatchers("/customer/**").hasRole(Roles.CUSTOMER)
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
+                        .loginProcessingUrl("/login")
+                        .usernameParameter("email")
+                        .passwordParameter("password")
                         .successHandler((req, res, auth) -> res.setStatus(200))
                         .failureHandler((req, res, ex) -> res.setStatus(401))
                 )

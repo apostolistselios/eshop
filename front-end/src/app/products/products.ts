@@ -1,28 +1,31 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { DataViewModule, DataViewPageEvent } from 'primeng/dataview';
-import { Button } from 'primeng/button';
+import { MessageService } from 'primeng/api';
 import { Card } from 'primeng/card';
-import { InputText } from 'primeng/inputtext';
-import { InputNumber } from 'primeng/inputnumber';
+import { Button } from 'primeng/button';
 
 import { ApiService } from '../api/api.service';
 import { Product } from './product.interface';
 import { PageableResponse } from '../api/pageable-response.interface';
+import { ProductSearch } from './product-search/product-search';
+import { ProductSearchParamsService } from './product-search/product-search-params.service';
 
 @Component({
   selector: 'app-products',
-  imports: [DataViewModule, Card, Button, InputText, InputNumber, ReactiveFormsModule],
+  imports: [DataViewModule, ProductSearch, ReactiveFormsModule, Card, Button],
   templateUrl: './products.html',
   styleUrl: './products.scss',
 })
 export class Products implements OnInit {
   private formBuilder = inject(FormBuilder);
+  private messageService = inject(MessageService);
   private apiService = inject(ApiService);
+  private productSearchParams = inject(ProductSearchParamsService);
 
   protected products = signal<Product[]>([]);
   protected totalRecords = signal(1);
-  protected itemsPerPage = 20;
+  protected itemsPerPage = 3;
 
   protected filterForm = this.formBuilder.group({
     type: [''],
@@ -39,11 +42,21 @@ export class Products implements OnInit {
   }
 
   loadProducts(page: number) {
-    const params = this.buildSearchParams(page);
+    const params = this.productSearchParams.buildSearchParams(this.filterForm, page, this.itemsPerPage);
 
-    this.apiService.get<PageableResponse<Product>>('/api/products', params).subscribe((res) => {
-      this.products.set(res.content);
-      this.totalRecords.set(res.totalElements);
+    this.apiService.get<PageableResponse<Product>>('/api/customer/products', params).subscribe({
+      next: (res) => {
+        this.products.set(res.content);
+        this.totalRecords.set(res.totalElements);
+      },
+      error: (err) => {
+        console.error(err);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: err.error.message,
+        });
+      },
     });
   }
 
@@ -65,22 +78,4 @@ export class Products implements OnInit {
     this.loadProducts(page);
   }
 
-  private buildSearchParams(page: number): Record<string, string | number | boolean> {
-    const filters = this.filterForm.getRawValue();
-
-    const params: Record<string, string | number | boolean> = {
-      page: page,
-      size: this.itemsPerPage,
-    };
-
-    Object.entries(filters).forEach(([key, value]) => {
-      if (value !== undefined && value !== null && value !== '') {
-        if (typeof value === 'number' || typeof value === 'string') {
-          params[key] = value;
-        }
-      }
-    });
-
-    return params;
-  }
 }

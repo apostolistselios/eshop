@@ -1,5 +1,6 @@
 package com.eshop.backend.services;
 
+import com.eshop.backend.exceptions.NotFoundException;
 import com.eshop.backend.exceptions.ShopAlreadyExistsException;
 import com.eshop.backend.models.Shop;
 import com.eshop.backend.models.User;
@@ -22,6 +23,11 @@ public class ShopService {
         shop.setUser(user);
 
         return this.shopRepository.save(shop);
+    }
+
+    public Shop findByUser(User user) {
+        return this.shopRepository.findByUser(user)
+                .orElseThrow(() -> new NotFoundException("Shop not found for user"));
     }
 
     private void assertTinDoesNotExist(String tin) {

@@ -2,6 +2,7 @@ package com.eshop.backend.controllers;
 
 import com.eshop.backend.models.Product;
 import com.eshop.backend.services.ProductService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -10,13 +11,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+@Tag(name = "Shop")
 @RestController
-@RequestMapping(path = "products")
-public class ProductController {
+@RequestMapping(path = "shop")
+public class ShopController {
     @Autowired
     private ProductService productService;
 
-    @GetMapping
+    @GetMapping(path = "products")
     public Page<Product> getProducts(
             @RequestParam(required = false) String type,
             @RequestParam(required = false) String brand,
@@ -27,12 +29,10 @@ public class ProductController {
             @RequestParam(required = false) Integer maxQuantity,
             Pageable pageable
     ) {
-        this.validateRanges(minPrice, maxPrice, minQuantity, maxQuantity);
-
-        return productService.getProducts(
-                normalize(type),
-                normalize(brand),
-                normalize(description),
+        return productService.getShopProducts(
+                type,
+                brand,
+                description,
                 minPrice,
                 maxPrice,
                 minQuantity,
@@ -40,22 +40,4 @@ public class ProductController {
                 pageable);
     }
 
-    private void validateRanges(
-            Double minPrice,
-            Double maxPrice,
-            Integer minQuantity,
-            Integer maxQuantity
-    ) {
-        if (minPrice != null && maxPrice != null && minPrice > maxPrice) {
-            throw new IllegalArgumentException("minPrice cannot be greater than maxPrice");
-        }
-
-        if (minQuantity != null && maxQuantity != null && minQuantity > maxQuantity) {
-            throw new IllegalArgumentException("minQuantity cannot be greater than maxQuantity");
-        }
-    }
-
-    private String normalize(String value) {
-        return (value != null && value.isBlank()) ? null : value;
-    }
 }

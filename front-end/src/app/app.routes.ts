@@ -9,6 +9,11 @@ import { Role } from './auth/role.enum';
 
 export const routes: Routes = [
   {
+    path: '',
+    pathMatch: 'full',
+    loadComponent: () => import('./home/home').then((m) => m.Home),
+  },
+  {
     path: 'login',
     component: Login,
   },
@@ -19,6 +24,12 @@ export const routes: Routes = [
         path: 'signup',
         component: CustomerSignup,
       },
+      {
+        path: 'products',
+        canActivate: [AuthGuard, RolesGuard],
+        data: { roles: [Role.CUSTOMER] },
+        loadComponent: () => import('./products/products').then((m) => m.Products),
+      },
     ],
   },
   {
@@ -28,12 +39,13 @@ export const routes: Routes = [
         path: 'signup',
         component: ShopSignup,
       },
+      {
+        path: 'manage-products',
+        canActivate: [AuthGuard, RolesGuard],
+        data: { roles: [Role.SHOP] },
+        loadComponent: () =>
+          import('./manage-products/manage-products').then((m) => m.ManageProducts),
+      },
     ],
-  },
-  {
-    path: 'products',
-    canActivate: [AuthGuard, RolesGuard],
-    data: { roles: [Role.CUSTOMER] },
-    loadComponent: () => import('./products/products').then((m) => m.Products),
   },
 ];

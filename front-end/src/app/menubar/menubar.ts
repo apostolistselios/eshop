@@ -38,8 +38,14 @@ export class Menubar {
       {
         label: 'Products',
         icon: 'pi pi-shopping-bag',
-        routerLink: '/products',
-        visible: user ? this.authService.hasAnyRole([Role.CUSTOMER, Role.SHOP]) : false,
+        routerLink: '/customer/products',
+        visible: user ? this.authService.hasAnyRole([Role.CUSTOMER]) : false,
+      },
+      {
+        label: 'Manage Products',
+        icon: 'pi pi-briefcase',
+        routerLink: '/shop/manage-products',
+        visible: user ? this.authService.hasAnyRole([Role.SHOP]) : false,
       },
     ]);
 

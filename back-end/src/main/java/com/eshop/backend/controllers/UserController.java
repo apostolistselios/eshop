@@ -2,6 +2,7 @@ package com.eshop.backend.controllers;
 
 import com.eshop.backend.models.User;
 import com.eshop.backend.repositories.UserRepository;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+@Tag(name = "User")
 @RestController
 @RequestMapping(path = "users")
 public class UserController {

@@ -1,6 +1,7 @@
 package com.eshop.backend.services;
 
 import com.eshop.backend.constants.Roles;
+import com.eshop.backend.exceptions.NotFoundException;
 import com.eshop.backend.exceptions.UserAlreadyExistsException;
 import com.eshop.backend.models.Role;
 import com.eshop.backend.models.User;
@@ -49,6 +50,11 @@ public class UserService {
         User savedCustomerUser = this.userRepository.save(customerUser);
 
         return savedCustomerUser;
+    }
+
+    public User findByEmail(String email) {
+        return this.userRepository.findByEmail(email)
+                .orElseThrow(() -> new NotFoundException("User not found"));
     }
 
     private void assertEmailDoesNotExist(String email) {

@@ -19,8 +19,8 @@ export class AuthService {
     this.restoreCurrentUser();
   }
 
-  async login(username: string, password: string): Promise<void> {
-    const body = new HttpParams().set('username', username).set('password', password);
+  async login(email: string, password: string): Promise<void> {
+    const body = new HttpParams().set('email', email).set('password', password);
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/x-www-form-urlencoded',

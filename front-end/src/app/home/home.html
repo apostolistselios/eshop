@@ -1,0 +1,24 @@
+<section class="mx-auto my-5 w-50">
+  <p-card>
+    <div class="d-flex flex-column gap-3">
+      <span class="text-uppercase text-secondary small fw-semibold">Eshop</span>
+      <h1 class="m-0 display-5">Simple shopping. Fast checkout.</h1>
+      <p class="m-0 text-secondary">Browse quality products or manage your shop inventory in one place.</p>
+
+      <div class="d-flex flex-wrap gap-3 mt-2">
+        @if (authService.isAuthenticated()) {
+          @if (authService.hasAnyRole([roles.CUSTOMER])) {
+            <p-button label="Browse products" icon="pi pi-shopping-bag" routerLink="/customer/products" />
+          }
+          @if (authService.hasAnyRole([roles.SHOP])) {
+            <p-button label="Manage products" icon="pi pi-briefcase" routerLink="/shop/manage-products" />
+          }
+        } @else {
+          <p-button label="Login" icon="pi pi-sign-in" routerLink="/login" />
+          <p-button label="Customer signup" icon="pi pi-user" severity="secondary" routerLink="/customer/signup" />
+          <p-button label="Shop signup" icon="pi pi-shop" severity="secondary" routerLink="/shop/signup" />
+        }
+      </div>
+    </div>
+  </p-card>
+</section>

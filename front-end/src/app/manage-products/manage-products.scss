@@ -1,0 +1,8 @@
+:host {
+  display: block;
+}
+
+:host ::ng-deep .p-datatable .p-datatable-thead > tr > th,
+:host ::ng-deep .p-datatable .p-datatable-tbody > tr > td {
+  white-space: nowrap;
+}

@@ -1,4 +1,4 @@
 export enum Role {
-  SHOP = 'shop',
-  CUSTOMER = 'customer',
+  SHOP = 'SHOP',
+  CUSTOMER = 'CUSTOMER',
 }

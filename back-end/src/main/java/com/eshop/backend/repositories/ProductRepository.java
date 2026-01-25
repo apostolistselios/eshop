@@ -28,4 +28,26 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
             @Param("maxQuantity") Integer maxQuantity,
             Pageable pageable);
 
+    @Query("""
+            SELECT p FROM Product p
+            WHERE (:type IS NULL OR LOWER(p.type) LIKE LOWER(CONCAT('%', :type, '%')))
+              AND (:brand IS NULL OR LOWER(p.brand) LIKE LOWER(CONCAT('%', :brand, '%')))
+              AND (:description IS NULL OR LOWER(p.description) LIKE LOWER(CONCAT('%', :description, '%')))
+              AND (:minPrice IS NULL OR p.price >= :minPrice)
+              AND (:maxPrice IS NULL OR p.price <= :maxPrice)
+              AND (:minQuantity IS NULL OR p.quantity >= :minQuantity)
+              AND (:maxQuantity IS NULL OR p.quantity <= :maxQuantity)
+              AND p.shop.id = :shopId
+            """)
+    Page<Product> findShopProductsByFilters(
+            @Param("shopId") Integer shopId,
+            @Param("type") String type,
+            @Param("brand") String brand,
+            @Param("description") String description,
+            @Param("minPrice") Double minPrice,
+            @Param("maxPrice") Double maxPrice,
+            @Param("minQuantity") Integer minQuantity,
+            @Param("maxQuantity") Integer maxQuantity,
+            Pageable pageable);
+
 }
