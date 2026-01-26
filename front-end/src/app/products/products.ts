@@ -25,7 +25,7 @@ export class Products implements OnInit {
 
   protected products = signal<Product[]>([]);
   protected totalRecords = signal(1);
-  protected itemsPerPage = 3;
+  protected itemsPerPage = 12;
 
   protected filterForm = this.formBuilder.group({
     type: [''],
@@ -42,7 +42,11 @@ export class Products implements OnInit {
   }
 
   loadProducts(page: number) {
-    const params = this.productSearchParams.buildSearchParams(this.filterForm, page, this.itemsPerPage);
+    const params = this.productSearchParams.buildSearchParams(
+      this.filterForm,
+      page,
+      this.itemsPerPage,
+    );
 
     this.apiService.get<PageableResponse<Product>>('/api/customer/products', params).subscribe({
       next: (res) => {
@@ -77,5 +81,4 @@ export class Products implements OnInit {
 
     this.loadProducts(page);
   }
-
 }

@@ -1,4 +1,7 @@
-<h4 class="mb-3">Manage Products</h4>
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h4 class="mb-0">Manage Products</h4>
+  <p-button label="Add product" icon="pi pi-plus" (onClick)="openAddProduct()" />
+</div>
 
 <app-product-search [form]="filterForm" (search)="onSearch()" (reset)="onReset()" />
 
@@ -54,6 +57,7 @@
         <p-sortIcon field="quantity" />
         <p-columnFilter field="quantity" type="numeric" display="menu" />
       </th>
+      <th class="text-center">Actions</th>
     </tr>
   </ng-template>
   <ng-template pTemplate="body" let-product>
@@ -63,11 +67,40 @@
       <td>{{ product.description }}</td>
       <td class="text-end">$ {{ product.price }}</td>
       <td class="text-end">{{ product.quantity }}</td>
+      <td class="text-center">
+        <div class="d-flex justify-content-center gap-2">
+          <p-button
+            icon="pi pi-pencil"
+            size="small"
+            severity="secondary"
+            pTooltip="Edit product"
+            tooltipPosition="top"
+            (onClick)="openEditProduct(product)"
+          />
+          <p-button
+            icon="pi pi-trash"
+            size="small"
+            severity="danger"
+            pTooltip="Delete product"
+            tooltipPosition="top"
+            (onClick)="deleteProduct(product)"
+          />
+        </div>
+      </td>
     </tr>
   </ng-template>
   <ng-template pTemplate="emptymessage">
     <tr>
-      <td colspan="5">No products found.</td>
+      <td colspan="6">No products found.</td>
     </tr>
   </ng-template>
 </p-table>
+
+<p-confirmDialog />
+
+<app-product-editor
+  [visible]="editorVisible()"
+  [productId]="editorProductId()"
+  (closed)="onEditorClosed()"
+  (saved)="onEditorSaved()"
+/>

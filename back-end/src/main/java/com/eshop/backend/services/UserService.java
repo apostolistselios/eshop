@@ -8,6 +8,7 @@ import com.eshop.backend.models.User;
 import com.eshop.backend.repositories.RoleRepository;
 import com.eshop.backend.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -55,6 +56,15 @@ public class UserService {
     public User findByEmail(String email) {
         return this.userRepository.findByEmail(email)
                 .orElseThrow(() -> new NotFoundException("User not found"));
+    }
+
+    public User getCurrentUser() {
+        String email = SecurityContextHolder.getContext()
+                .getAuthentication()
+                .getName();
+        User user = this.findByEmail(email);
+
+        return user;
     }
 
     private void assertEmailDoesNotExist(String email) {

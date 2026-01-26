@@ -1,20 +1,24 @@
 package com.eshop.backend.controllers;
 
+import com.eshop.backend.dto.CreateProductDto;
+import com.eshop.backend.dto.UpdateProductDto;
 import com.eshop.backend.models.Product;
 import com.eshop.backend.services.ProductService;
+import com.eshop.backend.services.ShopService;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "Shop")
 @RestController
 @RequestMapping(path = "shop")
 public class ShopController {
+    @Autowired
+    private ShopService shopService;
+
     @Autowired
     private ProductService productService;
 
@@ -38,6 +42,26 @@ public class ShopController {
                 minQuantity,
                 maxQuantity,
                 pageable);
+    }
+
+    @GetMapping(path = "products/{id}")
+    public Product getProductForShop(@PathVariable Long id) {
+        return this.productService.getProductForShop(id);
+    }
+
+    @PostMapping(path = "products")
+    public Product createProductForShop(@Valid @RequestBody CreateProductDto data) {
+        return this.productService.createProductForShop(data);
+    }
+
+    @PatchMapping(path = "products/{id}")
+    public Product updateProductForShop(@PathVariable Long id, @Valid @RequestBody UpdateProductDto data) {
+        return this.productService.updateProductForShop(id, data);
+    }
+
+    @DeleteMapping(path = "products/{id}")
+    public void deleteProductForShop(@PathVariable Long id) {
+        this.productService.deleteProductForShop(id);
     }
 
 }

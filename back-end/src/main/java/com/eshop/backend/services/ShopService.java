@@ -13,6 +13,9 @@ public class ShopService {
     @Autowired
     private ShopRepository shopRepository;
 
+    @Autowired
+    private UserService userService;
+
     public Shop createShop(String tin, String brandName, String owner, User user) {
         this.assertTinDoesNotExist(tin);
 
@@ -25,7 +28,9 @@ public class ShopService {
         return this.shopRepository.save(shop);
     }
 
-    public Shop findByUser(User user) {
+    public Shop findByCurrentUser() {
+        User user = this.userService.getCurrentUser();
+
         return this.shopRepository.findByUser(user)
                 .orElseThrow(() -> new NotFoundException("Shop not found for user"));
     }

@@ -1,11 +1,14 @@
 package com.eshop.backend.repositories;
 
 import com.eshop.backend.models.Product;
+import com.eshop.backend.models.Shop;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+
+import java.util.Optional;
 
 public interface ProductRepository extends JpaRepository<Product, Integer> {
     @Query("""
@@ -40,7 +43,7 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
               AND p.shop.id = :shopId
             """)
     Page<Product> findShopProductsByFilters(
-            @Param("shopId") Integer shopId,
+            @Param("shopId") Long shopId,
             @Param("type") String type,
             @Param("brand") String brand,
             @Param("description") String description,
@@ -50,4 +53,7 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
             @Param("maxQuantity") Integer maxQuantity,
             Pageable pageable);
 
+    Optional<Product> findByIdAndShop(Long id, Shop shop);
+
+    boolean existsByBrandAndType(String brand, String type);
 }

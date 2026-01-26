@@ -7,10 +7,10 @@ export class ProductSearchParamsService {
     form: FormGroup,
     page: number,
     size: number,
-  ): Record<string, string | number | boolean> {
+  ): Record<string, string | number | boolean | Array<string | number>> {
     const filters = form.getRawValue();
 
-    const params: Record<string, string | number | boolean> = {
+    const params: Record<string, string | number | boolean | Array<string | number>> = {
       page,
       size,
     };

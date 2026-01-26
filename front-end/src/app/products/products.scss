@@ -1,0 +1,20 @@
+.product-card-content {
+  display: flex;
+  gap: 1rem;
+  align-items: stretch;
+}
+
+.product-image {
+  width: 120px;
+  height: 120px;
+  object-fit: contain;
+  border-radius: 8px;
+  background: #f2f4f7;
+  flex-shrink: 0;
+}
+
+.product-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}

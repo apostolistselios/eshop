@@ -6,7 +6,7 @@ import jakarta.persistence.*;
 public class Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
     /**
      * Tax identification number
@@ -23,7 +23,7 @@ public class Customer {
     public Customer() {
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 

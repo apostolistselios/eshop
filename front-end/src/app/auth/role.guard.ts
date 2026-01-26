@@ -13,7 +13,8 @@ export class RolesGuard implements CanActivate {
     const requiredRoles = route.data['roles'] as Role[];
 
     if (!this.authService.isAuthenticated()) {
-      this.router.navigate(['/login']);
+      this.authService.clearAuthState();
+      this.router.navigate(['/']);
       return false;
     }
 

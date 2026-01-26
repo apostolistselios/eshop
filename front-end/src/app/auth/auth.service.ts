@@ -1,5 +1,6 @@
 import { HttpHeaders, HttpParams } from '@angular/common/http';
 import { computed, inject, Injectable, signal } from '@angular/core';
+import { Router } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 
 import { ApiService } from '../api/api.service';
@@ -9,6 +10,7 @@ import { Role } from './role.enum';
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private apiService = inject(ApiService);
+  private router = inject(Router);
 
   private _currentUser = signal<CurrentUser | null>(null);
 
@@ -52,7 +54,7 @@ export class AuthService {
     localStorage.setItem('currentUser', JSON.stringify(user));
   }
 
-  private clearAuthState(): void {
+  clearAuthState(): void {
     this._currentUser.set(null);
     localStorage.removeItem('currentUser');
   }
@@ -61,6 +63,17 @@ export class AuthService {
     const stored = localStorage.getItem('currentUser');
     if (stored) {
       this._currentUser.set(JSON.parse(stored));
+      void this.validateStoredUser();
+    }
+  }
+
+  private async validateStoredUser(): Promise<void> {
+    try {
+      const user = await this.fetchCurrentUser();
+      this.setCurrentUser(user);
+    } catch (error) {
+      this.clearAuthState();
+      this.router.navigate(['/']);
     }
   }
 
