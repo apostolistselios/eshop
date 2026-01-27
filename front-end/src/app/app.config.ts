@@ -1,11 +1,19 @@
-import { ApplicationConfig, provideBrowserGlobalErrorListeners } from '@angular/core';
+import {
+  ApplicationConfig,
+  inject,
+  provideAppInitializer,
+  provideBrowserGlobalErrorListeners,
+} from '@angular/core';
 import { provideRouter } from '@angular/router';
+import { provideHttpClient, withFetch } from '@angular/common/http';
 import { providePrimeNG } from 'primeng/config';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import Aura from '@primeuix/themes/aura';
 import { definePreset } from '@primeuix/themes';
+import { catchError, firstValueFrom, of } from 'rxjs';
 
 import { routes } from './app.routes';
-import { ConfirmationService, MessageService } from 'primeng/api';
+import { SecurityService } from './auth/security.service';
 
 const MyPreset = definePreset(Aura, {
   semantic: {
@@ -27,8 +35,18 @@ const MyPreset = definePreset(Aura, {
 
 export const appConfig: ApplicationConfig = {
   providers: [
+    provideHttpClient(withFetch()),
     provideBrowserGlobalErrorListeners(),
     provideRouter(routes),
+    provideAppInitializer(() => {
+      const security = inject(SecurityService);
+      return firstValueFrom(
+        security.refreshCsrf().pipe(
+          // Don’t crash the app if backend is temporarily down
+          catchError(() => of(null)),
+        ),
+      );
+    }),
     providePrimeNG({
       theme: {
         preset: MyPreset,

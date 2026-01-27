@@ -17,34 +17,56 @@ public class SecurityConfig {
     @Bean
     SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
         http
-                // disable CSRF for simplicity; in production, enable and configure it
-                .csrf(csrf -> csrf.disable())
+                .csrf(csrf -> csrf.spa())
                 .authorizeHttpRequests(auth -> auth
+                        // Angular static
+                        .requestMatchers(
+                                "/",
+                                "/index.html",
+                                "/favicon.ico",
+                                "/media/**",
+                                "/assets/**",
+                                "/*.js",
+                                "/*.css"
+                        ).permitAll()
+
+                        // Swagger
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
-                        .requestMatchers("/login").permitAll()
-                        .requestMatchers("/signup/**").permitAll()
-                        .requestMatchers("/shop/**").hasRole(Roles.SHOP)
-                        .requestMatchers("/customer/**").hasRole(Roles.CUSTOMER)
+
+                        // Csrf endpoint
+                        .requestMatchers("/api/csrf").permitAll()
+
+                        // Auth endpoints
+                        .requestMatchers("/api/login").permitAll()
+                        .requestMatchers("/api/signup/**").permitAll()
+
+                        // Rest Controllers
+                        .requestMatchers("/api/shop/**").hasRole(Roles.SHOP)
+                        .requestMatchers("/api/customer/**").hasRole(Roles.CUSTOMER)
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
-                        .loginProcessingUrl("/login")
+                        .loginProcessingUrl("/api/login")
                         .usernameParameter("email")
                         .passwordParameter("password")
                         .successHandler((req, res, auth) -> res.setStatus(200))
                         .failureHandler((req, res, ex) -> res.setStatus(401))
                 )
                 .logout(logout -> logout
+                        .logoutUrl("/api/logout")
                         .logoutSuccessHandler((req, res, auth) -> res.setStatus(200))
                 )
+                /**
+                 * @todo test this
+                 */
                 .sessionManagement(session -> session.maximumSessions(1))
-                // Disable default redirect to login page
                 .exceptionHandling(exceptions -> exceptions
                         .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
                 );
 
         return http.build();
     }
+
 
     @Bean
     public PasswordEncoder passwordEncoder() {

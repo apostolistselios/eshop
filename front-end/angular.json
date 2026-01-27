@@ -51,6 +51,15 @@
               "optimization": false,
               "extractLicenses": false,
               "sourceMap": true
+            },
+            "spring-dev": {
+              "optimization": false,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "outputPath": {
+                "base": "../back-end/src/main/resources/static",
+                "browser": ""
+              }
             }
           },
           "defaultConfiguration": "production"

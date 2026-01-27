@@ -27,8 +27,8 @@ public class OpenApiConfig {
             // -------- /login (form urlencoded) --------
             Schema<?> loginSchema = new Schema<>()
                     .type("object")
-                    .addProperty("email", new Schema<>().type("string").example("shop@demo.com"))
-                    .addProperty("password", new Schema<>().type("string").format("password").example("password"))
+                    .addProperty("email", new Schema<>().type("string").example("shop1@demo.com"))
+                    .addProperty("password", new Schema<>().type("string").format("password").example("shop1"))
                     .required(List.of("email", "password"));
 
             RequestBody loginBody = new RequestBody()
@@ -47,7 +47,7 @@ public class OpenApiConfig {
                             .addApiResponse("200", new ApiResponse().description("Logged in (JSESSIONID set)"))
                             .addApiResponse("401", new ApiResponse().description("Invalid credentials")));
 
-            openApi.getPaths().addPathItem("/login", new PathItem().post(loginOp));
+            openApi.getPaths().addPathItem("/api/login", new PathItem().post(loginOp));
 
             // -------- /logout --------
             Operation logoutOp = new Operation()
@@ -58,7 +58,7 @@ public class OpenApiConfig {
                             .addApiResponse("200", new ApiResponse().description("Logged out"))
                             .addApiResponse("401", new ApiResponse().description("Not authenticated")));
 
-            openApi.getPaths().addPathItem("/logout", new PathItem().post(logoutOp));
+            openApi.getPaths().addPathItem("/api/logout", new PathItem().post(logoutOp));
         };
     }
 }

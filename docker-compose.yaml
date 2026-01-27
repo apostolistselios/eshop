@@ -3,12 +3,37 @@ services:
     container_name: eshop_db
     image: mysql:8
     environment:
-      - MYSQL_DATABASE=eshop
-      - MYSQL_ROOT_PASSWORD=root
+      MYSQL_DATABASE: eshop
+      MYSQL_ROOT_PASSWORD: root
     ports:
       - '3307:3306'
     volumes:
       - eshop_db_volume:/var/lib/mysql
+    restart: unless-stopped
+    # healthcheck:
+    #   test: ['CMD', 'mysqladmin', 'ping', '-h', 'localhost', '-uroot', '-proot']
+    #   interval: 5s
+    #   timeout: 5s
+    #   retries: 20
+
+  eshop:
+    container_name: eshop_app
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: eshop:latest
+    ports:
+      - '8080:8080'
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/eshop?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+    depends_on:
+      - db
+      # db:
+      #   condition: service_healthy
+    restart: unless-stopped
 
 volumes:
   eshop_db_volume:

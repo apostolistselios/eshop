@@ -1,16 +1,19 @@
 import { HttpHeaders, HttpParams } from '@angular/common/http';
 import { computed, inject, Injectable, signal } from '@angular/core';
 import { Router } from '@angular/router';
-import { firstValueFrom } from 'rxjs';
+import { catchError, firstValueFrom, switchMap, tap, throwError } from 'rxjs';
 
 import { ApiService } from '../api/api.service';
 import { CurrentUser } from './current-user.interface';
 import { Role } from './role.enum';
+import { SecurityService } from './security.service';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private apiService = inject(ApiService);
   private router = inject(Router);
+
+  private apiService = inject(ApiService);
+  private securityService = inject(SecurityService);
 
   private _currentUser = signal<CurrentUser | null>(null);
 
@@ -21,26 +24,33 @@ export class AuthService {
     this.restoreCurrentUser();
   }
 
-  async login(email: string, password: string): Promise<void> {
+  login(email: string, password: string) {
     const body = new HttpParams().set('email', email).set('password', password);
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/x-www-form-urlencoded',
     });
 
-    try {
-      await firstValueFrom(this.apiService.post<void>('/api/login', body, headers));
-      const user = await this.fetchCurrentUser();
-      this.setCurrentUser(user);
-    } catch (error) {
-      this.clearAuthState();
-      throw error;
-    }
+    return this.apiService.post<void>('/api/login', body, headers).pipe(
+      switchMap(() => this.apiService.get<CurrentUser>('/api/users/current')),
+      tap((user) => {
+        this.setCurrentUser(user);
+        this.securityService.refreshCsrf().subscribe();
+      }),
+      catchError((error) => {
+        console.error(error);
+        this.clearAuthState();
+        return throwError(() => error);
+      })
+    );
   }
 
   logout(): void {
     this.apiService.post<void>('/api/logout', {}).subscribe({
-      next: () => this.clearAuthState(),
+      next: () => {
+        this.clearAuthState();
+        this.securityService.refreshCsrf().subscribe();
+      },
       error: () => this.clearAuthState(),
     });
   }

@@ -28,6 +28,9 @@ public class ShopService {
         return this.shopRepository.save(shop);
     }
 
+    /**
+     * @todo should add relation of user to the shop
+     */
     public Shop findByCurrentUser() {
         User user = this.userService.getCurrentUser();
 

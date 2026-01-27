@@ -26,25 +26,26 @@ export class Login {
     password: ['', Validators.required],
   });
 
-  async login() {
-    try {
-      const values = this.loginForm.getRawValue();
-      await this.authService.login(values.email, values.password);
+  login() {
+    const values = this.loginForm.getRawValue();
+    this.authService.login(values.email, values.password).subscribe({
+      next: () => {
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Success',
+          detail: 'Successfully logged in: ' + values.email,
+        });
 
-      this.messageService.add({
-        severity: 'success',
-        summary: 'Success',
-        detail: 'Successfully logged in: ' + values.email,
-      });
-
-      this.router.navigate(['/']);
-    } catch (error) {
-      console.error(error);
-      this.messageService.add({
-        severity: 'error',
-        summary: 'Error',
-        detail: 'Invalid credentials',
-      });
-    }
+        this.router.navigate(['/']);
+      },
+      error: (error) => {
+        console.error(error);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Invalid credentials',
+        });
+      },
+    });
   }
 }

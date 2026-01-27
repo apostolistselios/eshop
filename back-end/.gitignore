@@ -31,3 +31,6 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### Static Folder because it contains angular dist ###
+src/main/resources/static
