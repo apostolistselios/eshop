@@ -1,8 +1,16 @@
 package com.eshop.backend.models;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 @Entity
+@Table(
+        name = "shop",
+        uniqueConstraints = {
+                @UniqueConstraint(name = "uk_shop_tin", columnNames = "tin")
+        }
+)
 public class Shop {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -11,8 +19,17 @@ public class Shop {
     /**
      * Tax Identification Number
      */
+    @NotBlank
+    @Size(min = 9, max = 9)
+    @Column(nullable = false, length = 9)
     private String tin;
+
+    @NotBlank
+    @Column(nullable = false, length = 160)
     private String brandName;
+
+    @NotBlank
+    @Column(nullable = false, length = 160)
     private String owner;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
