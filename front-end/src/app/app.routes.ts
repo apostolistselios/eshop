@@ -36,6 +36,12 @@ export const routes: Routes = [
         data: { roles: [Role.CUSTOMER] },
         loadComponent: () => import('./cart/cart').then((m) => m.Cart),
       },
+      {
+        path: 'orders',
+        canActivate: [AuthGuard, RolesGuard],
+        data: { roles: [Role.CUSTOMER] },
+        loadComponent: () => import('./orders/orders').then((m) => m.Orders),
+      },
     ],
   },
   {

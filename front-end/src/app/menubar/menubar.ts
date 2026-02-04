@@ -48,6 +48,12 @@ export class Menubar {
         visible: user ? this.authService.hasAnyRole([Role.CUSTOMER]) : false,
       },
       {
+        label: 'Orders',
+        icon: 'pi pi-receipt',
+        routerLink: '/customer/orders',
+        visible: user ? this.authService.hasAnyRole([Role.CUSTOMER]) : false,
+      },
+      {
         label: 'Manage Products',
         icon: 'pi pi-briefcase',
         routerLink: '/shop/manage-products',

@@ -45,6 +45,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/shop/**").hasRole(Roles.SHOP)
                         .requestMatchers("/api/customer/**").hasRole(Roles.CUSTOMER)
                         .requestMatchers("/api/cart/**").hasRole(Roles.CUSTOMER)
+                        .requestMatchers("/api/order/**").hasRole(Roles.CUSTOMER)
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
@@ -58,10 +59,6 @@ public class SecurityConfig {
                         .logoutUrl("/api/logout")
                         .logoutSuccessHandler((req, res, auth) -> res.setStatus(200))
                 )
-                /**
-                 * @todo test this login from incognito too
-                 */
-                .sessionManagement(session -> session.maximumSessions(1))
                 .exceptionHandling(exceptions -> exceptions
                         .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
                 );

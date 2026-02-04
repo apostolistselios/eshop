@@ -9,6 +9,8 @@
         @if (authService.isAuthenticated()) {
           @if (authService.hasAnyRole([roles.CUSTOMER])) {
             <p-button label="Browse products" icon="pi pi-shopping-bag" routerLink="/customer/products" />
+            <p-button label="View cart" icon="pi pi-shopping-cart" severity="secondary" routerLink="/customer/cart" />
+            <p-button label="View orders" icon="pi pi-receipt" severity="secondary" routerLink="/customer/orders" />
           }
           @if (authService.hasAnyRole([roles.SHOP])) {
             <p-button label="Manage products" icon="pi pi-briefcase" routerLink="/shop/manage-products" />
