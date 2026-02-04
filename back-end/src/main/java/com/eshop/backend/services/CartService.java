@@ -91,10 +91,10 @@ public class CartService {
     @Transactional
     public void deleteCartItem(Long productId) {
         Cart cart = this.getCartByCustomer();
-        CartItem item = this.cartItemRepository.findByCartIdAndProductId(cart.getId(), productId)
-                .orElseThrow(() -> new NotFoundException("Cart item not found"));
-
-        this.cartItemRepository.deleteById(item.getId());
+        boolean removed = cart.getItems().removeIf(cartItem -> cartItem.getProduct().getId().equals(productId));
+        if (!removed) {
+            throw new NotFoundException("Cart item not found");
+        }
     }
 
     @Transactional
