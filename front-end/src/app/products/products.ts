@@ -6,6 +6,7 @@ import { Card } from 'primeng/card';
 import { Button } from 'primeng/button';
 
 import { ApiService } from '../api/api.service';
+import { CartService } from '../cart/cart.service';
 import { Product } from './product.interface';
 import { PageableResponse } from '../api/pageable-response.interface';
 import { ProductSearch } from './product-search/product-search';
@@ -21,6 +22,7 @@ export class Products implements OnInit {
   private formBuilder = inject(FormBuilder);
   private messageService = inject(MessageService);
   private apiService = inject(ApiService);
+  private cartService = inject(CartService);
   private productSearchParams = inject(ProductSearchParamsService);
 
   protected products = signal<Product[]>([]);
@@ -80,5 +82,34 @@ export class Products implements OnInit {
     }
 
     this.loadProducts(page);
+  }
+
+  addToCart(product: Product) {
+    if (!product.id) {
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'Missing id',
+        detail: 'This product cannot be added to the cart.',
+      });
+      return;
+    }
+
+    this.cartService.addItem(product.id, 1).subscribe({
+      next: () => {
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Added to cart',
+          detail: `${product.brand} ${product.type} added to cart.`,
+        });
+      },
+      error: (err) => {
+        console.error(err);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: err.error?.message ?? 'Failed to add product to cart.',
+        });
+      },
+    });
   }
 }

@@ -33,6 +33,7 @@
                     icon="pi pi-cart-arrow-down"
                     label="Add to cart"
                     [disabled]="item.quantity === 0"
+                    (onClick)="addToCart(item)"
                   />
                 </div>
               </div>

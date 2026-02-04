@@ -26,8 +26,8 @@ export class ApiService {
     return this.http.patch<T>(endpoint, body, { headers, withCredentials: true });
   }
 
-  delete<T>(endpoint: string, headers?: HttpHeaders): Observable<T> {
-    return this.http.delete<T>(endpoint, { headers, withCredentials: true });
+  delete<T, B = unknown>(endpoint: string, body?: B, headers?: HttpHeaders): Observable<T> {
+    return this.http.delete<T>(endpoint, { body, headers, withCredentials: true });
   }
 
   private buildParams(
