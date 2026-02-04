@@ -3,7 +3,6 @@ package com.eshop.backend.models;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
-import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,10 +28,6 @@ public class PurchaseOrder {
     @Column(nullable = false)
     private Instant createdAt;
 
-    @NotNull
-    @Column(nullable = false, precision = 10, scale = 2)
-    private BigDecimal totalAmount;
-
     @OneToMany(mappedBy = "purchaseOrder", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderItem> items = new ArrayList<>();
 
@@ -53,7 +48,7 @@ public class PurchaseOrder {
     }
 
     public void setCustomer(Customer customer) {
-        this.customer = this.customer;
+        this.customer = customer;
     }
 
     public Instant getCreatedAt() {
@@ -64,15 +59,12 @@ public class PurchaseOrder {
         this.createdAt = createdAt;
     }
 
-    public BigDecimal getTotalAmount() {
-        return this.totalAmount;
-    }
-
-    public void setTotalAmount(BigDecimal totalAmount) {
-        this.totalAmount = totalAmount;
-    }
-
     public List<OrderItem> getItems() {
         return this.items;
+    }
+
+    public void addItem(OrderItem item) {
+        this.items.add(item);
+        item.setPurchaseOrder(this);
     }
 }

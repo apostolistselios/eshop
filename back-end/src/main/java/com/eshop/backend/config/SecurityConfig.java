@@ -39,10 +39,12 @@ public class SecurityConfig {
                         // Auth endpoints
                         .requestMatchers("/api/login").permitAll()
                         .requestMatchers("/api/signup/**").permitAll()
+                        .requestMatchers("/error").permitAll()
 
                         // Rest Controllers
                         .requestMatchers("/api/shop/**").hasRole(Roles.SHOP)
                         .requestMatchers("/api/customer/**").hasRole(Roles.CUSTOMER)
+                        .requestMatchers("/api/cart/**").hasRole(Roles.CUSTOMER)
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
@@ -57,7 +59,7 @@ public class SecurityConfig {
                         .logoutSuccessHandler((req, res, auth) -> res.setStatus(200))
                 )
                 /**
-                 * @todo test this
+                 * @todo test this login from incognito too
                  */
                 .sessionManagement(session -> session.maximumSessions(1))
                 .exceptionHandling(exceptions -> exceptions

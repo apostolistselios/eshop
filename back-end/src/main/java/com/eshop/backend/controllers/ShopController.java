@@ -1,7 +1,7 @@
 package com.eshop.backend.controllers;
 
-import com.eshop.backend.dto.CreateProductDto;
-import com.eshop.backend.dto.UpdateProductDto;
+import com.eshop.backend.dto.product.CreateProductDto;
+import com.eshop.backend.dto.product.UpdateProductDto;
 import com.eshop.backend.models.Product;
 import com.eshop.backend.services.ProductService;
 import com.eshop.backend.services.ShopService;

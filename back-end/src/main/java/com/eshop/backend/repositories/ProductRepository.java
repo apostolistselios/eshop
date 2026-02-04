@@ -2,13 +2,17 @@ package com.eshop.backend.repositories;
 
 import com.eshop.backend.models.Product;
 import com.eshop.backend.models.Shop;
+import jakarta.persistence.LockModeType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 public interface ProductRepository extends JpaRepository<Product, Integer> {
     @Query("""
@@ -55,5 +59,11 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
 
     Optional<Product> findByIdAndShop(Long id, Shop shop);
 
+    Optional<Product> findById(Long id);
+
     boolean existsByBrandAndType(String brand, String type);
+
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    @Query("select p from Product p where p.id in :ids")
+    List<Product> findAllByIdInForUpdate(@Param("ids") Set<Long> ids);
 }

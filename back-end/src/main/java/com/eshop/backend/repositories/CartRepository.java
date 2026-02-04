@@ -1,15 +1,15 @@
 package com.eshop.backend.repositories;
 
 import com.eshop.backend.models.Cart;
+import com.eshop.backend.models.Customer;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
 public interface CartRepository extends JpaRepository<Cart, Long> {
-    Optional<Cart> findByCustomerId(Long customerId);
+    Optional<Cart> findByCustomer(Customer customer);
 
-    boolean existsByCustomerId(Long customerId);
-
-//    @EntityGraph(attributePaths = {"items", "items.product"})
-//    Optional<Cart> findWithItemsByCustomerId(Long customerId);
+    @EntityGraph(attributePaths = {"items", "items.product"})
+    Optional<Cart> findWithItemsByCustomer(Customer customer);
 }

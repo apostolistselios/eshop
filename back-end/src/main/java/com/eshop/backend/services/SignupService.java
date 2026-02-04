@@ -1,7 +1,7 @@
 package com.eshop.backend.services;
 
-import com.eshop.backend.dto.SignupCustomerDto;
-import com.eshop.backend.dto.SignupShopDto;
+import com.eshop.backend.dto.signup.SignupCustomerDto;
+import com.eshop.backend.dto.signup.SignupShopDto;
 import com.eshop.backend.models.Customer;
 import com.eshop.backend.models.Shop;
 import com.eshop.backend.models.User;
@@ -22,17 +22,17 @@ public class SignupService {
 
     @Transactional
     public Shop signupAsShop(SignupShopDto data) {
-        User shopUser = this.userService.createShopUser(data.getEmail(), data.getPassword());
-        Shop newShop = this.shopService.createShop(data.getTin(), data.getBrandName(), data.getOwner(), shopUser);
+        User shopUser = this.userService.createShopUser(data.email(), data.password());
+        Shop newShop = this.shopService.createShop(data.tin(), data.brandName(), data.owner(), shopUser);
 
         return newShop;
     }
 
     @Transactional
     public Customer signupAsCustomer(SignupCustomerDto data) {
-        User customerUser = this.userService.createCustomerUser(data.getEmail(), data.getPassword());
+        User customerUser = this.userService.createCustomerUser(data.email(), data.password());
         Customer newCustomer = this.customerService.createCustomer(
-                data.getTin(), data.getFirstname(), data.getLastname(), data.getEmail(), customerUser);
+                data.tin(), data.firstname(), data.lastname(), data.email(), customerUser);
 
         return newCustomer;
     }

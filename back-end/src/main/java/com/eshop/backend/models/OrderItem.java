@@ -51,10 +51,6 @@ public class OrderItem {
         return this.id;
     }
 
-    public PurchaseOrder getPurchaseOrder() {
-        return this.purchaseOrder;
-    }
-
     public void setPurchaseOrder(PurchaseOrder order) {
         this.purchaseOrder = order;
     }

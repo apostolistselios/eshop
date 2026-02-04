@@ -1,4 +1,4 @@
-package com.eshop.backend.dto;
+package com.eshop.backend.dto.product;
 
 import jakarta.validation.constraints.*;
 
@@ -13,8 +13,6 @@ public record CreateProductDto(
         @Size(max = 100)
         String type,
 
-        @NotBlank
-        @Size(max = 1000)
         String description,
 
         @NotNull

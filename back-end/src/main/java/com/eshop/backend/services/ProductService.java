@@ -1,9 +1,12 @@
 package com.eshop.backend.services;
 
-import com.eshop.backend.dto.CreateProductDto;
-import com.eshop.backend.dto.UpdateProductDto;
+import com.eshop.backend.dto.product.CreateProductDto;
+import com.eshop.backend.dto.product.UpdateProductDto;
+import com.eshop.backend.exceptions.NotEnoughStockException;
 import com.eshop.backend.exceptions.NotFoundException;
 import com.eshop.backend.exceptions.ProductAlreadyExistsException;
+import com.eshop.backend.models.Cart;
+import com.eshop.backend.models.CartItem;
 import com.eshop.backend.models.Product;
 import com.eshop.backend.models.Shop;
 import com.eshop.backend.repositories.ProductRepository;
@@ -12,7 +15,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Service
 public class ProductService {
@@ -126,5 +131,53 @@ public class ProductService {
         }
 
         this.productRepository.delete(product.get());
+    }
+
+    public Map<Long, Product> loadProductsForCartWithLock(Cart cart) {
+        Set<Long> ids = extractProductIdsFromCart(cart);
+        List<Product> products = this.productRepository.findAllByIdInForUpdate(ids);
+        Map<Long, Product> map = products.stream()
+                .collect(Collectors.toMap(Product::getId, Function.identity()));
+        for (Long id : ids) {
+            if (!map.containsKey(id)) {
+                throw new NotFoundException("Product not found: " + id);
+            }
+        }
+
+        return map;
+    }
+
+    public void checkProductsHaveEnoughStock(Cart cart, Map<Long, Product> products) {
+        for (CartItem cartItem : cart.getItems()) {
+            Product product = products.get(cartItem.getProduct().getId());
+            Long requestedQty = cartItem.getQuantity();
+            Long availableQty = product.getQuantity() == null ? 0 : product.getQuantity();
+            if (requestedQty > availableQty) {
+                throw new NotEnoughStockException(product);
+            }
+        }
+    }
+
+    public void decrementQuantitiesBasedOnCart(Cart cart, Map<Long, Product> products) {
+        for (CartItem cartItem : cart.getItems()) {
+            Product product = products.get(cartItem.getProduct().getId());
+            product.setQuantity(product.getQuantity() - cartItem.getQuantity());
+            this.productRepository.save(product);
+        }
+    }
+
+    public Product findProductById(Long productId) {
+        return this.productRepository.findById(productId)
+                .orElseThrow(() -> new NotFoundException("Product with id: " + productId + " not found"));
+    }
+
+    private Set<Long> extractProductIdsFromCart(Cart cart) {
+        if (cart.getItems() == null) {
+            return Collections.emptySet();
+        }
+
+        return cart.getItems().stream()
+                .map(i -> i.getProduct().getId())
+                .collect(Collectors.toSet());
     }
 }

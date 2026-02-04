@@ -23,11 +23,11 @@ public class Product {
     private Long id;
 
     @NotBlank
-    @Column(nullable = false, length = 80)
+    @Column(nullable = false, length = 100)
     private String type;
 
     @NotBlank
-    @Column(nullable = false, length = 80)
+    @Column(nullable = false, length = 100)
     private String brand;
 
     @Column(columnDefinition = "TEXT")
@@ -41,7 +41,7 @@ public class Product {
     @Column(nullable = false)
     private Long quantity;
 
-    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "shop_id", nullable = false)
     private Shop shop;
 
