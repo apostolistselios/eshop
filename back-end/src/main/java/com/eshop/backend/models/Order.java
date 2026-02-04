@@ -9,12 +9,12 @@ import java.util.List;
 
 @Entity
 @Table(
-        name = "purchase_order",
+        name = "orders",
         indexes = {
-                @Index(name = "idx_purchase_order_customer", columnList = "customer_id")
+                @Index(name = "idx_order_customer", columnList = "customer_id")
         }
 )
-public class PurchaseOrder {
+public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -28,10 +28,10 @@ public class PurchaseOrder {
     @Column(nullable = false)
     private Instant createdAt;
 
-    @OneToMany(mappedBy = "purchaseOrder", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderItem> items = new ArrayList<>();
 
-    public PurchaseOrder() {
+    public Order() {
     }
 
     @PrePersist
@@ -65,6 +65,6 @@ public class PurchaseOrder {
 
     public void addItem(OrderItem item) {
         this.items.add(item);
-        item.setPurchaseOrder(this);
+        item.setOrder(this);
     }
 }

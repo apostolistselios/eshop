@@ -98,13 +98,13 @@ public class CartService {
     }
 
     @Transactional
-    public PurchaseOrder checkout() {
+    public Order checkout() {
         Cart cart = this.getCartByCustomer();
         this.assertCartIsNotEmpty(cart);
 
         Map<Long, Product> products = this.productService.loadProductsForCartWithLock(cart);
         this.productService.checkProductsHaveEnoughStock(cart, products);
-        PurchaseOrder order = this.orderService.createOrder(cart);
+        Order order = this.orderService.createOrder(cart);
         this.productService.decrementQuantitiesBasedOnCart(cart, products);
         cart.getItems().clear();
 

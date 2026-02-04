@@ -1,19 +1,28 @@
 package com.eshop.backend.services;
 
 import com.eshop.backend.models.*;
-import com.eshop.backend.repositories.PurchaseOrderRepository;
+import com.eshop.backend.repositories.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Service
 public class OrderService {
     @Autowired
-    private PurchaseOrderRepository purchaseOrderRepository;
+    private CustomerService customerService;
 
-    public PurchaseOrder createOrder(Cart cart) {
-        PurchaseOrder order = new PurchaseOrder();
+    @Autowired
+    private OrderRepository orderRepository;
+
+    public List<Order> getOrdersByCustomer() {
+        Customer customer = this.customerService.findByCurrentUser();
+        return this.orderRepository.findAllByCustomer(customer);
+    }
+
+    public Order createOrder(Cart cart) {
+        Order order = new Order();
         order.setCustomer(cart.getCustomer());
         BigDecimal total = BigDecimal.ZERO;
         for (CartItem cartItem : cart.getItems()) {
@@ -31,6 +40,6 @@ public class OrderService {
             total = total.add(unitPrice.multiply(BigDecimal.valueOf(qty)));
         }
 
-        return this.purchaseOrderRepository.save(order);
+        return this.orderRepository.save(order);
     }
 }

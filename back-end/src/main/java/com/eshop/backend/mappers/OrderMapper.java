@@ -2,14 +2,14 @@ package com.eshop.backend.mappers;
 
 import com.eshop.backend.dto.order.OrderItemResponseDto;
 import com.eshop.backend.dto.order.OrderResponseDto;
+import com.eshop.backend.models.Order;
 import com.eshop.backend.models.OrderItem;
-import com.eshop.backend.models.PurchaseOrder;
 
 import java.math.BigDecimal;
 import java.util.List;
 
 public class OrderMapper {
-    public static OrderResponseDto toDto(PurchaseOrder order) {
+    public static OrderResponseDto toDto(Order order) {
         List<OrderItemResponseDto> items = order.getItems().stream()
                 .map(OrderMapper::toItemDto)
                 .toList();

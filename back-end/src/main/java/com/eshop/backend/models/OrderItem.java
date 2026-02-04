@@ -11,12 +11,12 @@ import java.math.BigDecimal;
         name = "order_item",
         uniqueConstraints = {
                 @UniqueConstraint(
-                        name = "uk_order_item_purchase_order_product",
-                        columnNames = {"purchase_order_id", "product_id"}
+                        name = "uk_order_item_order_product",
+                        columnNames = {"order_id", "product_id"}
                 )
         },
         indexes = {
-                @Index(name = "idx_order_item_purchase_order", columnList = "purchase_order_id"),
+                @Index(name = "idx_order_item_order", columnList = "order_id"),
                 @Index(name = "idx_order_item_product", columnList = "product_id")
         }
 )
@@ -27,8 +27,8 @@ public class OrderItem {
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "purchase_order_id", nullable = false)
-    private PurchaseOrder purchaseOrder;
+    @JoinColumn(name = "order_id", nullable = false)
+    private Order order;
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
@@ -51,8 +51,8 @@ public class OrderItem {
         return this.id;
     }
 
-    public void setPurchaseOrder(PurchaseOrder order) {
-        this.purchaseOrder = order;
+    public void setOrder(Order order) {
+        this.order = order;
     }
 
     public Product getProduct() {
