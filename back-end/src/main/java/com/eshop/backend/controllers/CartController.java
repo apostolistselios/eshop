@@ -34,6 +34,11 @@ public class CartController {
         return CartMapper.toDto(this.cartService.updateCartItem(productId, data.quantity()));
     }
 
+    @DeleteMapping(path = "item/{productId}")
+    public void deleteCartItem(@PathVariable Long productId) {
+        this.cartService.deleteCartItem(productId);
+    }
+
     @PostMapping(path = "checkout")
     public OrderResponseDto checkoutCart() {
         return OrderMapper.toDto(this.cartService.checkout());

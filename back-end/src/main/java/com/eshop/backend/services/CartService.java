@@ -31,7 +31,7 @@ public class CartService {
 
     public Cart getCartByCustomer() {
         Customer customer = this.customerService.findByCurrentUser();
-        return this.cartRepository.findWithItemsByCustomer(customer)
+        return this.cartRepository.findByCustomer(customer)
                 .orElseGet(() -> this.createCartForCustomer(customer));
     }
 
@@ -89,6 +89,15 @@ public class CartService {
     }
 
     @Transactional
+    public void deleteCartItem(Long productId) {
+        Cart cart = this.getCartByCustomer();
+        CartItem item = this.cartItemRepository.findByCartIdAndProductId(cart.getId(), productId)
+                .orElseThrow(() -> new NotFoundException("Cart item not found"));
+
+        this.cartItemRepository.deleteById(item.getId());
+    }
+
+    @Transactional
     public PurchaseOrder checkout() {
         Cart cart = this.getCartByCustomer();
         this.assertCartIsNotEmpty(cart);
@@ -97,7 +106,7 @@ public class CartService {
         this.productService.checkProductsHaveEnoughStock(cart, products);
         PurchaseOrder order = this.orderService.createOrder(cart);
         this.productService.decrementQuantitiesBasedOnCart(cart, products);
-        this.cartItemRepository.deleteByCartId(cart.getId());
+        cart.getItems().clear();
 
         return order;
     }
