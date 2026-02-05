@@ -58,6 +58,8 @@ public class ProductController {
             @RequestParam(required = false) Long maxQuantity,
             Pageable pageable
     ) {
+        this.validateRanges(minPrice, maxPrice, minQuantity, maxQuantity);
+
         return productService.getShopProducts(
                 type,
                 brand,
