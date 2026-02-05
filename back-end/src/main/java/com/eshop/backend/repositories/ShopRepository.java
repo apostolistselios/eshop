@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
-public interface ShopRepository extends JpaRepository<Shop, Integer> {
+public interface ShopRepository extends JpaRepository<Shop, Long> {
     boolean existsByTin(String tin);
 
     Optional<Shop> findByTin(String tin);

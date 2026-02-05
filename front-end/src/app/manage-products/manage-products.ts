@@ -135,7 +135,7 @@ export class ManageProducts implements OnInit {
       acceptButtonStyleClass: 'p-button-danger',
       rejectButtonStyleClass: 'p-button-secondary',
       accept: () => {
-        this.apiService.delete<void>(`/api/shop/products/${product.id}`).subscribe({
+        this.apiService.delete<void>(`/api/products/${product.id}`).subscribe({
           next: () => {
             this.messageService.add({
               severity: 'success',
@@ -167,7 +167,7 @@ export class ManageProducts implements OnInit {
   }
 
   private loadProducts(params: Record<string, string | number | boolean | Array<string | number>>) {
-    this.apiService.get<PageableResponse<Product>>('/api/shop/products', params).subscribe({
+    this.apiService.get<PageableResponse<Product>>('/api/products/manage', params).subscribe({
       next: (res) => {
         this.products.set(res.content);
         this.totalRecords.set(res.totalElements);

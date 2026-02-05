@@ -70,9 +70,10 @@ export class ProductEditor implements OnChanges {
 
     const payload = this.productForm.getRawValue();
     const productId = this.productId();
-    const request = this.isEditMode() && productId !== null
-      ? this.apiService.patch<void, Product>(`/api/shop/products/${productId}`, payload)
-      : this.apiService.post<void, Product>('/api/shop/products', payload);
+    const request =
+      this.isEditMode() && productId !== null
+        ? this.apiService.patch<void, Product>(`/api/products/${productId}`, payload)
+        : this.apiService.post<void, Product>('/api/products', payload);
 
     this.isLoading.set(true);
     this.fieldErrors.set({});
@@ -109,7 +110,7 @@ export class ProductEditor implements OnChanges {
   private loadProduct(id: number) {
     this.isLoading.set(true);
     this.fieldErrors.set({});
-    this.apiService.get<Product>(`/api/shop/products/${id}`).subscribe({
+    this.apiService.get<Product>(`/api/products/${id}`).subscribe({
       next: (product) => {
         this.productForm.patchValue({
           type: product.type,

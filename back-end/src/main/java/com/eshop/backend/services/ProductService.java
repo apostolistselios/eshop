@@ -15,6 +15,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -34,10 +35,10 @@ public class ProductService {
             String type,
             String brand,
             String description,
-            Double minPrice,
-            Double maxPrice,
-            Integer minQuantity,
-            Integer maxQuantity,
+            BigDecimal minPrice,
+            BigDecimal maxPrice,
+            Long minQuantity,
+            Long maxQuantity,
             Pageable pageable
     ) {
         return this.productRepository.findByFilters(
@@ -55,10 +56,10 @@ public class ProductService {
             String type,
             String brand,
             String description,
-            Double minPrice,
-            Double maxPrice,
-            Integer minQuantity,
-            Integer maxQuantity,
+            BigDecimal minPrice,
+            BigDecimal maxPrice,
+            Long minQuantity,
+            Long maxQuantity,
             Pageable pageable
     ) {
         Shop shop = this.shopService.findByCurrentUser();

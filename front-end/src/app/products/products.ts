@@ -50,7 +50,7 @@ export class Products implements OnInit {
       this.itemsPerPage,
     );
 
-    this.apiService.get<PageableResponse<Product>>('/api/customer/products', params).subscribe({
+    this.apiService.get<PageableResponse<Product>>('/api/products', params).subscribe({
       next: (res) => {
         this.products.set(res.content);
         this.totalRecords.set(res.totalElements);

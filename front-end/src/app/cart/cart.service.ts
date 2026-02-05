@@ -19,19 +19,19 @@ export class CartService {
 
   addItem(productId: number, quantity: number): Observable<CartResponseDto> {
     const payload: AddCartItemDto = { productId, quantity };
-    return this.apiService.post<CartResponseDto, AddCartItemDto>('/api/cart/item', payload);
+    return this.apiService.post<CartResponseDto, AddCartItemDto>('/api/cart/items', payload);
   }
 
   updateItem(productId: number, quantity: number): Observable<CartResponseDto> {
     const payload: UpdateCartItemDto = { quantity };
     return this.apiService.patch<CartResponseDto, UpdateCartItemDto>(
-      `/api/cart/item/${productId}`,
+      `/api/cart/items/${productId}`,
       payload,
     );
   }
 
   deleteItem(productId: number): Observable<void> {
-    return this.apiService.delete<void>(`/api/cart/item/${productId}`);
+    return this.apiService.delete<void>(`/api/cart/items/${productId}`);
   }
 
   checkout(): Observable<OrderResponseDto> {

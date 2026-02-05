@@ -4,6 +4,7 @@ import com.eshop.backend.constants.Roles;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -13,6 +14,7 @@ import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity
 public class SecurityConfig {
     @Bean
     SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
@@ -42,8 +44,6 @@ public class SecurityConfig {
                         .requestMatchers("/error").permitAll()
 
                         // Rest Controllers
-                        .requestMatchers("/api/shop/**").hasRole(Roles.SHOP)
-                        .requestMatchers("/api/customer/**").hasRole(Roles.CUSTOMER)
                         .requestMatchers("/api/cart/**").hasRole(Roles.CUSTOMER)
                         .requestMatchers("/api/order/**").hasRole(Roles.CUSTOMER)
                         .anyRequest().authenticated()

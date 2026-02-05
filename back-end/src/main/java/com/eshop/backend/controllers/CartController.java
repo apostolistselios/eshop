@@ -24,17 +24,17 @@ public class CartController {
         return CartMapper.toDto(this.cartService.getCartByCustomer());
     }
 
-    @PostMapping(path = "item")
+    @PostMapping(path = "items")
     public CartResponseDto addCartItem(@Valid @RequestBody AddCartItemDto data) {
         return CartMapper.toDto(this.cartService.addCartItem(data.productId(), data.quantity()));
     }
 
-    @PatchMapping(path = "item/{productId}")
+    @PatchMapping(path = "items/{productId}")
     public CartResponseDto updateCartItem(@PathVariable Long productId, @Valid @RequestBody UpdateCartItemDto data) {
         return CartMapper.toDto(this.cartService.updateCartItem(productId, data.quantity()));
     }
 
-    @DeleteMapping(path = "item/{productId}")
+    @DeleteMapping(path = "items/{productId}")
     public void deleteCartItem(@PathVariable Long productId) {
         this.cartService.deleteCartItem(productId);
     }

@@ -10,11 +10,12 @@ import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-public interface ProductRepository extends JpaRepository<Product, Integer> {
+public interface ProductRepository extends JpaRepository<Product, Long> {
     @Query("""
             SELECT p FROM Product p
             WHERE (:type IS NULL OR LOWER(p.type) LIKE LOWER(CONCAT('%', :type, '%')))
@@ -29,10 +30,10 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
             @Param("type") String type,
             @Param("brand") String brand,
             @Param("description") String description,
-            @Param("minPrice") Double minPrice,
-            @Param("maxPrice") Double maxPrice,
-            @Param("minQuantity") Integer minQuantity,
-            @Param("maxQuantity") Integer maxQuantity,
+            @Param("minPrice") BigDecimal minPrice,
+            @Param("maxPrice") BigDecimal maxPrice,
+            @Param("minQuantity") Long minQuantity,
+            @Param("maxQuantity") Long maxQuantity,
             Pageable pageable);
 
     @Query("""
@@ -51,10 +52,10 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
             @Param("type") String type,
             @Param("brand") String brand,
             @Param("description") String description,
-            @Param("minPrice") Double minPrice,
-            @Param("maxPrice") Double maxPrice,
-            @Param("minQuantity") Integer minQuantity,
-            @Param("maxQuantity") Integer maxQuantity,
+            @Param("minPrice") BigDecimal minPrice,
+            @Param("maxPrice") BigDecimal maxPrice,
+            @Param("minQuantity") Long minQuantity,
+            @Param("maxQuantity") Long maxQuantity,
             Pageable pageable);
 
     Optional<Product> findByIdAndShop(Long id, Shop shop);
